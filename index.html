@@ -10,54 +10,40 @@
 </head>
 <body>
 
-  <div class="header">
-    How's the Weather?
-  </div>
-<div class="container">
-  <div class="row justify-content-left"> 
-    <div class="search-bar">
-      <div class="input-group">
-        <input type="search" class="form-control rounded" placeholder="City" aria-label="Search" aria-describedby="search-addon" />
-        <button type="button" class="btn btn-outline-primary">search</button>
-      </div>
+    <div class="header">
+      How's the Weather?
     </div>
-  </div>  
-</div>  
   <div class="container">
-    <div class="row justify-content-end">
-      <div class="col-10 col-sm-6" id="weather-dashboard">
-        City Name <br>
-        Today's weather conditions go here
+    <div class="row justify-content-left"> 
+      <div class="search-bar">
+        <div class="input-group">
+          <input type="search" class="form-control rounded" placeholder="City" aria-label="Search" aria-describedby="search-addon" />
+          <button type="button" class="btn btn-outline-primary">search</button>
+        </div>
       </div>
     </div>  
-  </div>    
-  <div class="forecast-header">
-    5-Day Forecast:
-  </div>
-  <div class="container">
-    <div class="row justify-content-end">
-      <div class="col-2">
-        day 1 date
-        weather conditions will go in here
-      </div>
-      <div class="col-2">
-        day 2 date
-        weather conditions will go in here
-      </div>
-      <div class="col-2">
-        day 3 date
-        weather conditions will go in here
-      </div>
-      <div class="col-2">
-        day 4 date
-        weather conditions will go in here
-      </div>
-      <div class="col-2">
-        day 5 date
-        weather conditions will go in here
-      </div>
+  </div>  
+    <div class="container">
+      <div class="row justify-content-end">
+        <div class="col-10 col-sm-6" id="weather-dashboard">
+          <h3 class="card-title" id="currentCity"></h3>
+          <p class="card-body" id="temp"></p>
+          <p class="card-body" id="wind"></p>
+          <p class="card-body" id="humidity"></p>
+        </div>
+      </div>  
+    </div>    
+    <div class="forecast-header">
+      5-Day Forecast:
     </div>
-  </div>
+    <div class="container">
+      <div class="row 5day-forecast justify-content-around">
+        <div class="row 5day-forecast justify-content-around">
+
+        </div>
+      </div>  
+    </div>    
+  
 
 
 <script type="text/javascript" src="./assets/script.js"></script>
