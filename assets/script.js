@@ -1,59 +1,73 @@
 // a variable to store the openweather API key
-const apiKey = '&appid=db48e387d4849a796217eec1e8c0d5e8';
-//a variable to store the api link for searched city's future conditions
-const locationApi = "https://api.openweathermap.org/data/2.5/onecall?";
-// a variable to store the api link for the searched city's current conditions
-const cityApi = "https://api.openweathermap.org/data/2.5/weather/?q="; 
+const apiKey = 'db48e387d4849a796217eec1e8c0d5e8';
 
-let lat;
-let lon;
-let icon;
-let day;
-let city;
 
-// fetch request for searched city's current weather conditions
-function currentConditions(city) {
-  fetch(cityApi + city + apiKey).then(function (response) {
-      // if search returns
-      if (response.ok) {
-          response.json().then(function (data) {
-              //get coordinates for forecast
-              console.log(data);
-              lat = data.coord.lat;
-              lon = data.coord.lon;
-              icon = data.weather[0].icon;
-          // call showConditions fn to display
-              showConditions(city);
-          });
-      } else {
-          // if search not found
-          savedSearch.shift();
-          // alert
-          alert("City not found, please enter another city name");
-          location.reload();
-      }
-  });
+// click event to grab input value to pass to api call
+let submitBtn = document.getElementById('submitBtn');
+submitBtn.addEventListener('click', function(){
+    let searchValue = document.getElementById('search').value
+    console.log(searchValue)
+    getLatLon(searchValue)
+});
+// create geocode fn to grab coordinates for current weather and forecast weather
+function getLatLon(searchValue, cityName){
+    fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${searchValue}=&name${cityName}&appid=${apiKey}`)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+        currentWeather(data[0].lat, data[0].lon)
+        forecast(data[0].lat, data[0].lon)
+//    grab 'name' value from API and display it in h2 element on currentWeather
+        var cityName = document.createElement('h2')
+        cityName.textContent = 'City: ' + data.name
+
+        document.getElementById('currentWeather').append(cityName)
+    })
 }
 
-// a function to show conditions in the current city (search), and 5day forecast
-function showConditions(city) {
-  fetch(locationApi + "&lat=" + lat + "&lon=" + lon + apiKey)
-  .then(function (response) {
-      return response.json();
-  })
-  .then(function (data) {
-      console.log(data)
+// date and city name in dashboard container
+function currentWeather(lat, lon,) {
+    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+        var temperature = document.createElement('h3')
+        temperature.textContent = 'temp: ' + data.current.temp
+    
 
-      icon = data.current.weather[0].icon;
-     
-      today = new Date().toLocaleDateString("en-US", {
-          timeZone: `${data.timeZone}`,
-      });
+        document.getElementById('currentWeather').append(temperature)
+    })
+}    
 
-      // date and city name in dashboard container
-      
 
-      // loop data through weather forecast cards
+// loop data through weather forecast cards
+function forecast(lat, lon) {
+    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`)
+    .then(response => response.json())
+    .then(data => {
+        for(var i = 1; data.daily.length-3; i++) {
+            var forecastTemp = document.createElement('div')
+            forecastTemp.setAttribute('class', 'forecastCards')
+            forecastTemp.textContent = "temp: " + data.daily[i].temp.day
+
+            document.getElementById('forecastCard').append(forecastTemp)
+
+            var forecastWeather = document.createElement('div')
+            forecastWeather.setAttribute('class', 'forecastCards')
+            forecastWeather.textContent = " " + data.daily[i].weather.icon
+
+            document.getElementById('forecastCard').append(forecastWeather)
+
+            // var forecastWeather = document.createElement('p')
+            // forecastWeather.setAttribute('class', 'forecastCards')
+            // forecastWeather.textContent = " " + data.daily[i].weather.icon
+
+            // document.getElementById('forecastCard').append(forecastWeather)
+        }
+        // console.log(data) 
+    })
+}   
+
 
 
 
