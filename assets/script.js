@@ -15,17 +15,16 @@ function getLatLon(searchValue, cityName){
     .then(response => response.json())
     .then(data => {
         console.log(data)
-        currentWeather(data[0].lat, data[0].lon)
-        forecast(data[0].lat, data[0].lon)
+        currentWeather(data[0].lat, data[0].lon);
+        forecast(data[0].lat, data[0].lon);
 //    grab 'name' value from API and display it in h2 element on currentWeather
         var cityName = document.createElement('h2')
         cityName.textContent = 'City: ' + data.name
-
-        document.getElementById('currentWeather').append(cityName)
+        document.getElementById('city-name').append(cityName)
     })
 }
 
-// date and city name in dashboard container
+// current conditions in the weather dashboard
 function currentWeather(lat, lon,) {
     fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`)
     .then(response => response.json())
@@ -33,9 +32,12 @@ function currentWeather(lat, lon,) {
         console.log(data)
         var temperature = document.createElement('h3')
         temperature.textContent = 'temp: ' + data.current.temp
-    
-
         document.getElementById('currentWeather').append(temperature)
+
+        // get weather icon from API and append to img element in html
+        var weatherIcon = data.current.weather[0].icon;
+        weatherIcon.textContent = data.current.weather[0].icon;
+        document.getElementById('current-icon').append(weatherIcon);
     })
 }    
 
@@ -46,24 +48,19 @@ function forecast(lat, lon) {
     .then(response => response.json())
     .then(data => {
         for(var i = 1; data.daily.length-3; i++) {
-            var forecastTemp = document.createElement('div')
-            forecastTemp.setAttribute('class', 'forecastCards')
-            forecastTemp.textContent = "temp: " + data.daily[i].temp.day
+            // daily avg temperatures
+            var forecastTemp = document.createElement('div');
+            forecastTemp.setAttribute('class', 'forecastCards');
+            forecastTemp.textContent = "temp: " + data.daily[i].temp.day;
+            document.getElementsByClassName('forecastCard').append(forecastTemp);
 
-            document.getElementById('forecastCard').append(forecastTemp)
+            // weather icons
+            var weatherIcon = data.current.weather[0].icon;
+            weatherIcon.textContent = " " + data.daily[i].weather[0].icon;
+            document.getElementsByClassName('forecast-icon').append(weatherIcon);
 
-            var forecastWeather = document.createElement('div')
-            forecastWeather.setAttribute('class', 'forecastCards')
-            forecastWeather.textContent = " " + data.daily[i].weather.icon
-
-            document.getElementById('forecastCard').append(forecastWeather)
-
-            // var forecastWeather = document.createElement('p')
-            // forecastWeather.setAttribute('class', 'forecastCards')
-            // forecastWeather.textContent = " " + data.daily[i].weather.icon
-
-            // document.getElementById('forecastCard').append(forecastWeather)
-        }
+       
+        }world
         // console.log(data) 
     })
 }   
